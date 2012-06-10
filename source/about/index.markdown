@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "About myself"
+title: "About me"
 date: 2012-06-10 16:10
 comments: false
 sharing: true
