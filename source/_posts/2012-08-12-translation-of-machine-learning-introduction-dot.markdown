@@ -3,7 +3,7 @@ layout: post
 title: "Перевод 'Machine Learning. Introduction.'"
 date: 2012-08-12 15:58
 comments: true
-categories: [Russian, translations, meachine learning]
+categories: [Russian, translations, meachine learning, math]
 ---
 
 ##От переводчика(меня).
