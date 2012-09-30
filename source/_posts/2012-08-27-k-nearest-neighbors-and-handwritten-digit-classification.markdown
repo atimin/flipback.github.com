@@ -152,7 +152,7 @@ def test(data, k):
 
 Запустив алгоритм с $$ k=1 $$ получаем 89% успешного выполнения. Меняя $$ k $$ мы видим изменение эффективности, без модификации алгоритма или метрики. Конечно, график ниже показывает, что рукописные данные вполне согласуются с аксиомой ближайших соседей.
 
-![]( images/posts/k-vs-percentage-correct.png  "A graph of classification accuracy against k for values of k between 1 and 50. The graph clearly shows a downward trend as k increases, but all values k < 10 are comparably go")
+![]( {{ root_url }}/images/posts/k-vs-percentage-correct.png  "A graph of classification accuracy against k for values of k between 1 and 50. The graph clearly shows a downward trend as k increases, but all values k < 10 are comparably go")
 
 Также есть много улучшений и мы могли бы сделать более подходящий алгоритм. Но рассматривая, что алгоритм использует не обработанные данные и не манипулирует с с ними, результат не так уж плох.
 
@@ -178,6 +178,6 @@ def test(data, k):
 
 [1]: http://jeremykun.wordpress.com/2011/08/11/the-perceptron-and-all-the-things-it-cant-perceive/
 [2]: http://courses.cs.tamu.edu/rgutier/cs790_w02/l8.pdf
-[3]: images/posts/concentric-circles-knn.png
+[3]: {{ root_url }}/images/posts/concentric-circles-knn.png
 [4]: http://www.improvedoutcomes.com/docs/WebSiteDocs/Clustering/Clustering_Parameters/Manhattan_Distance_Metric.htm
 [5]: http://ru.wikipedia.org/wiki/K-%D0%BC%D0%B5%D1%80%D0%BD%D0%BE%D0%B5_%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%BE

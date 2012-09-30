@@ -3,7 +3,7 @@ layout: post
 title: "The Algorithm of slicing N-dimension dense matrix"
 date: 2012-08-18 18:27
 comments: true
-publish: false
+published: false
 categories: 
 ---
 
