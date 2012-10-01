@@ -3,7 +3,7 @@ layout: post
 title: "NMatrix 0.2.0 and slicing"
 date: 2012-09-30 19:43
 comments: true
-categories: [ruby, math]
+categories: [ruby, math, English]
 ---
 
 A few days ago the [new version][1] of NMatrix has been released. Besides a lot new features it has slicing operations now. The slicing has been implemented by two ways. First of they it's a slicing by reference. It is provided by **#[]** method:

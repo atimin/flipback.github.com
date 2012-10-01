@@ -3,7 +3,7 @@ layout: post
 title: "NMatrix -a numeric library for mathematicians in Ruby"
 date: 2012-08-13 08:37
 comments: true
-categories: [Ruby, math]
+categories: [Ruby, math, English]
 ---
 
 A few words about very interesting project - [NMatrix](https://github.com/SciRuby/nmatrix). At the moment Python is the best chose of dynamic languages to work with math. It has many very stable and quality libraries such as [NumPy](http://numpy.scipy.org/), [SciPy](http://www.scipy.org/), [matlib](http://matplotlib.sourceforge.net/) and etc. But all may change... 
