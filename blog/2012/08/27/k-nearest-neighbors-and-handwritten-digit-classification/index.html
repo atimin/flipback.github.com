@@ -1,0 +1,434 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Метод K-ближайших соседей и распознавание рукописных цифр - Flipback&#8217;s blog</title>
+	<meta name="author" content="Aleksey Timin">
+
+	
+	<meta name="description" content="Источник K-Nearest-Neighbors and Handwritten Digit Classification. Рецепт классификации Одна из важных задач машинного обучения (далее МО) - это &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Flipback's blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Flipback&#8217;s blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+	<li><a href="http://flip-cherdak.blogspot.com/">Old blog</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+	<li><a href="http://flip-cherdak.blogspot.com/">Old blog</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:flipback.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		<a class="google" href="https://plus.google.com/100647047226011286297?rel=author" title="Google+">Google+</a>
+		
+		
+		<a class="twitter" href="http://twitter.com/aleksey_timin" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/flipback" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:flipback.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+<div id="banner" class="inner">
+	<div class="container">
+		<ul class="feed"></ul>
+	</div>
+	<small><a href="http://twitter.com/aleksey_timin">aleksey_timin</a> @ <a href="http://twitter.com">Twitter</a></small>
+	<div class="loading">Loading&#8230;</div>
+</div>
+<script src="/javascripts/twitter.js"></script>
+<script type="text/javascript">
+	(function($){
+		$('#banner').getTwitterFeed('aleksey_timin', 4, true);
+	})(jQuery);
+</script>
+
+	
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">Метод K-ближайших соседей и распознавание рукописных цифр</h1>
+	<div class="entry-content"><p>Источник <a href="http://jeremykun.wordpress.com/2012/08/26/k-nearest-neighbors-and-handwritten-digit-classification/">K-Nearest-Neighbors and Handwritten Digit Classification</a>.</p>
+
+<h2>Рецепт классификации</h2>
+
+<p>Одна из важных задач машинного обучения (далее МО) - это распределение объектов по нескольких известных классов. Например, Вам нужно отличить полезное письмо от спама. Или Вы хотите определить вид жука на основе его физических параметров, таких как: вес, цвет, длина челюсти. Эти &ldquo;атрибуты&rdquo;, часто называемые <em>свойствами</em> в терминах МО, и так же часто интерпретируются, как <em>размерностью</em> в рамках линейной алгебры. В качестве разминка для читателей: &ldquo;Какие <strong>свойства</strong> имеет электронное письмо?&rdquo;. Верных ответов будет достаточно много.</p>
+
+<!-- MORE -->
+
+
+<p>Общепринятый метод классификации данных является обучение с <em>учителем</em>. Это когда мы предоставляем набор уже классифицированных данных на вход алгоритма обучения, который создает внутреннюю модель задачи и используем отдельный алгоритм классификации, который в свою очередь использует эту внутреннюю модель для классификации новых данных. Фаза тренировки обычно сложная, а алгоритм классификации прост, хотя это может быть и не так для методов, которые мы будем исследовать в этом посте.</p>
+
+<p>Чаще всего, входные данные для алгоритма обучения преобразуются одним из подходящим способов в числовое представление. Это не так просто, как звучит. Для этого мы отделим данные от области приложения, что в некоторой степени позволит применять математический анализ. Мы можем сфокусировать наши вопросы на <em>данные</em>, а не на <em>задачи</em>. В общем, это основной принцип применения математики: извлечь из задачи сущность вопроса, на который мы хотим ответить, в чистом математическом виде, после интерпретируем результат.</p>
+
+<p>В наше статье о <a href="http://jeremykun.wordpress.com/2011/08/11/the-perceptron-and-all-the-things-it-cant-perceive/">персептроне</a>, мы вывели алгоритм для поиска линии, которая разделяет все точки одного класса от другого, априори предполагая, что она существует. В данной посте, однако, мы делаем другие структурные предположения. Именно, мы допускаем, что данные - точки, которые находятся в одном классе и также расположены близко друг к другу, соотносятся в <strong>подходящей метрике</strong>. Читатель может отметить следующую нестандартную терминологию, это просто математическое переопределение того, что мы уже сказали.</p>
+
+<p><strong>Аксиома соседства</strong>: Пусть $(X, d)$ будет <a href="http://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D1%82%D1%80%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5_%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%82%D0%B2%D0%BE">метрическим пространством</a> и пусть $ S \in X $ будет конечным множеством, элементы которого классифицируются через функцию $ f:S \rightarrow { 1,2,..m } $. Мы говорим, что $ S $ удовлетворяет <em>аксиоме соседства</em>, если для каждой точки $ x \in S $ есть $ y $ ближайшая к $ x $, тогда $ f(x) = f(y) $. То есть $ y $ разделяет тот же класс, что и $ x $, если $ y $ ближайший сосед $ x $.</p>
+
+<p>Для более глубокого понимания метрики, читатель может посмотреть <a href="http://jeremykun.wordpress.com/2012/08/26/metric-spaces-a-primer/">пример</a>. Для нашего поста и всех будущих, $ X $ будет всегда $ \mathbb{R}^n $ для любого $ n $, в то время как метрика $ d $ будет меняться.</p>
+
+<p>Эта аксиома действительно очень <em>смелое</em> предположение, которое определенно не истинно для множества наборов данных. Практически, это сильно зависит от постановки задачи. Наличие неправильных типов или количества свойств, неправильные преобразования, или использование неправильных метрик может сделать предположение некорректным, даже если задача от природы имеет нужную структуру. К счастью, для реальных приложений нам нужно только прилепить данные к аксиоме соседства приближенно (конечно, аксиома только проверяется в приближении). Также мы подразумеваем под &ldquo;приближением&rdquo; также зависимость от задачи и терпимость пользователя к ошибкам. Такова природа прикладной математики.</p>
+
+<p>Как только мы поймем аксиому, алгоритм МО по существу станет очевидным. Для разминки: Есть большое количество точек, чьи классы известны и фиксированы на метрическом пространстве. Чтобы определить класс неизвестной точки, достаточно использовать самый общий класс ее ближайших соседей. Т.к. количество соседей может меняться, этот метод интуитивно называется <em>метод К-ближайших соседей (КБС)</em>.</p>
+
+<h2>Самый основной способ обучения: копирование соседей.</h2>
+
+<p>Давайте перейдем к деталям программы и для теста создадим &ldquo;болванку&rdquo; данных. Это будет набор точек из $ \mathbb {R}^2 $, которые явно удовлетворяют условиям аксиомы соседства. Сделаем это с помощью Питона, создав набор данных из 2-х независимых нормально распределенных массивов случайных чисел:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">random</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">gaussCluster</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">stdDev</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[(</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">stdDev</span><span class="p">),</span>
+</span><span class='line'>             <span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">stdDev</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">)]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">makeDummyData</span><span class="p">():</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">gaussCluster</span><span class="p">((</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">gaussCluster</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Первая функция просто возвращает набор точек, которые определенны нормальным распределением. Для простоты мы сделали ковариацию двух случайных величин одинаковой. Вторя функция собирает два набора в один массив.</p>
+
+<p>Теперь дадим классам болванки &ldquo;метки&rdquo;, мы будем просто иметь второй список, чтобы хранить рядом с данными. Индекс точки в первом массиве будет соответствовать индексу его метки во втором. Есть и более элегантные способы организации данных, но сейчас сойдет и так.</p>
+
+<p>Реализация метрики так же проста. Сейчас, мы будем использовать стандартную Эвклидову метрику. Т.е. мы просто берем сумму квадратов координат двух точек.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">math</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">euclideanDistance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">([(</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)]))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Для реализации классификатора, мы создадим функцию, которая сама вернет нам функцию.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">heapq</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">makeKNNClassifier</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">classify</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">closestPoints</span> <span class="o">=</span> <span class="n">heapq</span><span class="o">.</span><span class="n">nsmallest</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+</span><span class='line'>                                        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="err">м</span>
+</span><span class='line'>        <span class="n">closestLabels</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">pt</span><span class="p">)</span> <span class="ow">in</span> <span class="n">closestPoints</span><span class="p">]</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">closestLabels</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">closestLabels</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">classify</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Есть несколько хитрых вещей в этой функции, которые заслуживают обсуждения. Первое и главное, мы определяем функцию внутри другой функции, и возвращаем созданную функцию. Важным техническим моментом здесь является то, что созданная функция сохранит все локальные переменные, которые есть в ее области даже если функция завершиться. Попробуйте, вы сможете вызвать <em>makeKNNClassifier</em> несколько раз с разными аргументами , и возвращаемые функции не будут мешать друг другу. Это особенность языка программирования, называется <em>замыкание</em> (<em>closure</em>). Это позволяет нам, например, сохранять важные данные видимыми и в тоже время скрывать данные нижнего уровня, зависимые, но которые не могут быть доступны напрямую.</p>
+
+<p>Второй момент, мы используем некоторые Питоновские конструкции. Первая линия классификатора использует <em>heapq</em> для хранения $ k $ наименьших элементов массива данных, но в добавок мы используем <em>enumerate</em> для хранения индекса возвращаемого элемента, и ключ по которому мы будем определять &ldquo;ближайшее&rdquo; определяется с помощью функции, переданной в качестве аргумента. Заметим, что индекс <em>y<a href="http://jeremykun.wordpress.com/2011/08/11/the-perceptron-and-all-the-things-it-cant-perceive/">1</a></em> в лямбда функции используется, как &ldquo;y&rdquo; координату и не сохраняет индекс.</p>
+
+<p>Вторая линия просто извлекает список меток соответствующий каждой из ближайших точек, которые мы получили после вызова &ldquo;nsmallest&rdquo;. В заключение, третья линия возвращает максимум из данных меток, где вес метки (определенный через плохо названную <em>key</em> lambda) это их количество в <em>closestLabels</em> списке.</p>
+
+<p>Используем этих в функций в небольшом примере:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">trainingPoints</span> <span class="o">=</span> <span class="n">makeDummyData</span><span class="p">()</span> <span class="c"># has 50 points from each class</span>
+</span><span class='line'><span class="n">trainingLabels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">50</span> <span class="o">+</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">50</span>  <span class="c"># an arbitrary choice of labeling</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">f</span> <span class="o">=</span> <span class="n">makeKNNClassifier</span><span class="p">(</span><span class="n">trainingPoints</span><span class="p">,</span> <span class="n">trainingLabels</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">euclideanDistance</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">f</span><span class="p">((</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Читатель может повозиться с примером как хочет, но мы не будем заниматься этим дальше. Как обычно, весь код в этом посте доступен <a href="http://code.google.com/p/math-intersect-programming/downloads/list">здесь</a>. Перейдем к вещам более сложным.</p>
+
+<h2>Рукописные цифры.</h2>
+
+<p>Есть почти классический пример в литературе по классификации - это распознавание рукописных цифр. Эта задача оригинально появилась (как гласит легенда) в Почтовой Службе США для цели автоматизации сортировки почты по почтовым индексам. &hellip; Давайте посмотрим, как наш алгоритм воплотит это в реальность.</p>
+
+<p>Мы возьмем данные из <a href="http://archive.ics.uci.edu/ml/">UCI</a> репозитория с небольшими изменениями, мы предоставляем из <a href="http://code.google.com/p/math-intersect-programming/downloads/list">здесь</a>. Одна линия файла данный предоставляет рукописную цифру и ее метку. Цифра это вектор размерностью 256 полученный путем упаковки 16х16 двоичной картинки в ряд по строкам. Меткой будет число, которое представлено на картинке. Наш файл содержит 1593 примера примерно по 160 на цифру.</p>
+
+<p>Другими словами, наше метрическое пространство $ { 0,1 }^{256} $, и мы выбрали Эвклидово пространство для простоты. Линия наших данных выглядит вот так:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 
+</span><span class='line'>0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 
+</span><span class='line'>0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 
+</span><span class='line'>0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 
+</span><span class='line'>0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 
+</span><span class='line'>0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 
+</span><span class='line'>0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 
+</span><span class='line'>0 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 
+</span><span class='line'>1 1 1 1 1 0 0 0 1 1 1 0 0 0 0 0 
+</span><span class='line'>1 1 1 0 0 0 0 0 0 1 1 0 0 0 0 0 
+</span><span class='line'>1 1 1 0 0 0 0 0 0 1 1 0 0 0 0 0 
+</span><span class='line'>1 1 0 0 0 0 0 0 0 1 1 0 0 0 0 0 
+</span><span class='line'>1 1 0 0 0 0 0 0 1 1 0 0 0 0 0 0 
+</span><span class='line'>1 1 0 0 0 0 0 1 1 0 0 0 0 0 0 0 
+</span><span class='line'>1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 
+</span><span class='line'>0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0, 6</span></code></pre></td></tr></table></div></figure>
+
+
+<p>После чтения данных, мы случайным образом делим данный на 2 массива, первый будет для обучения, второй для проверки. Следующая функция делает это, возвращая оценку успешности алгоритма классификации на массиве проверочных данных.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">mport</span> <span class="n">knn</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">random</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">column</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+</span><span class='line'>   <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">A</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+</span><span class='line'>   <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span><span class='line'>   <span class="n">pts</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">column</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">column</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="n">trainingData</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:</span><span class="mi">800</span><span class="p">]</span>
+</span><span class='line'>   <span class="n">trainingLabels</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[:</span><span class="mi">800</span><span class="p">]</span>
+</span><span class='line'>   <span class="n">testData</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[</span><span class="mi">800</span><span class="p">:]</span>
+</span><span class='line'>   <span class="n">testLabels</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="mi">800</span><span class="p">:]</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="n">f</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">makeKNNClassifier</span><span class="p">(</span><span class="n">trainingData</span><span class="p">,</span> <span class="n">trainingLabels</span><span class="p">,</span>
+</span><span class='line'>                             <span class="n">k</span><span class="p">,</span> <span class="n">knn</span><span class="o">.</span><span class="n">euclideanDistance</span><span class="p">)</span>
+</span><span class='line'>   <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'>   <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">testLabels</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="k">for</span> <span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">testLabels</span><span class="p">):</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="o">==</span> <span class="n">label</span><span class="p">:</span>
+</span><span class='line'>         <span class="n">correct</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span> <span class="o">/</span> <span class="n">total</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Запустив алгоритм с $ k=1 $ получаем 89% успешного выполнения. Меняя $ k $ мы видим изменение эффективности, без модификации алгоритма или метрики. В итоге, график ниже показывает, что рукописные данные вполне согласуются с аксиомой ближайших соседей.</p>
+
+<p><img src="/images/posts/k-vs-percentage-correct.png" title="A graph of classification accuracy against k for values of k between 1 and 50. The graph clearly shows a downward trend as k increases, but all values k &lt; 10 are comparably go" alt="" /></p>
+
+<p>Также возможно улучшить эту программу и мы могли бы сделать более подходящий алгоритм. Но рассматривая, что алгоритм использует необработанные данные и не манипулирует с с ними, результат не так уж плох.</p>
+
+<p>В качестве примечания, могло бы быть гораздо интереснее, взять какое-нибудь планшетное программное обеспечение и использовать данный метод для распознавания цифр написанных на нем. Но увы, у нас мало времени для такого рода приложений.</p>
+
+<h2>Преимущество, улучшения и проблемы.</h2>
+
+<p>Первое преимущество <em>k-ближайших соседей</em> - общий и широко-известный алгоритм, который легко реализуется. Конечно, мы сделали ядро алгоритма всего в три строчки. Но данный алгоритм легко распараллелить и он от природы гибок. В отличии от <a href="http://jeremykun.wordpress.com/2011/08/11/the-perceptron-and-all-the-things-it-cant-perceive/">персептрона</a>, который полагается на линейное разделение, метод соседей и аксиома соседства доступны для данных, которые представлены в виде разных геометрических фигур. В этих <a href="http://courses.cs.tamu.edu/rgutier/cs790_w02/l8.pdf">лекциях</a> есть хорошие примеры, как показано ниже, и читатель может конечно сделать еще больше фокусов.</p>
+
+<p><img src="/images/posts/concentric-circles-knn.png" title="k-nearest-neighbors applied to a data set organized in concentric circles." alt="" /></p>
+
+<p>Конечно, гибкость еще больше, в силу того, что можно использовать любые метрики для подсчета дистанций. Можно для примера, использовать <a href="http://www.improvedoutcomes.com/docs/WebSiteDocs/Clustering/Clustering_Parameters/Manhattan_Distance_Metric.htm">метрику Манхэттена</a>, если точки располагаются в городе. Возможности ограничиваются только нахождением новых и полезных метрик.</p>
+
+<p>С такой популярностью KБС часто используется с некоторыми модификациями и улучшениями. Одно из улучшений - это гистерезис, который удаляет определенные точки рядом с границей решения. Такая техника называется модифицированный алгоритм КБС. Другое улучшение - это утяжелять определенные свойства при вычислении дистанции, которые требуют программного определения, какое свойство меньше полезно при классификации. Это уже ближе к области деревьев решений, поэтому мы оставим все это для тренировки читателя.</p>
+
+<p>Следующее улучшение должно оптимизировать время выполнения. Если дано $ n $ учебных точек и $ d $ свойств, одна точка требует $ O(nd) $ для классификации. Это особенно расточительно, потому что большинство вычислений дистанций исполняются между точками, которые очень сильно рассеяны, и как $ k $ обычно мал, они не влияют на классификацию.</p>
+
+<p>Один способ облегчить - это хранить точки в структуре, так называемых <a href="http://ru.wikipedia.org/wiki/K-%D0%BC%D0%B5%D1%80%D0%BD%D0%BE%D0%B5_%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%BE">k-деревья</a>. Данный метод возник в вычислительной геометрии в задаче о положении точки. Он разделяет пространство на части, основанные на количестве точек в каждом участке, и организовывает их в дерево. Другими словами, он может выделить узкую область, где точки расположены плотно, и грубо, где их меньше. Каждый шаг обхода дерева, может проверить, в какой суб-области лежат неклассифицириумые  точки, и решить надлежащим образом. С определенной гарантией, это уменьшит вычисления до $ O(log(n)d) $. К несчастью, есть проблемы в случае большого количества измерений, что выходит за рамки этого поста. Мы планируем исследовать k-d деревья в будущей серии о вычислительной геометрии.</p>
+
+<p>Последняя проблема, которую мы рассмотрим - масштабирование данных. А именно, нужно быть осторожным, когда конвертируем реальные данные в числа. Мы можем думать о каждом свойстве, как о случайной переменной, и мы хотим, что бы все эти переменные имели сопоставимые изменения. Причина проста - мы используем <em>сферы</em>. Можно описать КБС, как поиск наименьшей сферы с центром в безымянной точке, которая содержит $ k $  именных точек данных, и использовать большее общее этих точек, что бы классифицировать новую. Конечно, можно говорить &ldquo;сфера&rdquo; в любом метрическом пространстве; это просто множество точек на фиксированном расстоянии от центра. Важное замечание то, что сфера имеет одинаковую длину для все осей. Если данные масштабируются не правильно, когда геометрия сферы не отражает геометрию данных, и алгоритм будет спотыкаться.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+<time class='entry-date' datetime='2012-08-27T21:09:00+06:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>9:09 pm</span></time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/math/'>math</a>, <a class='category' href='/blog/categories/meachine-learning/'>meachine learning</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/russian/'>russian</a>, <a class='category' href='/blog/categories/translations/'>translations</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Aleksey Timin
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'flpbacksblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://flipback.github.com/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/';
+        var disqus_url = 'http://flipback.github.com/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-10108623-4']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Flipback&#8217;s blog</title>
+	<title>NMatrix 0.2.0 and slicing - Flipback&#8217;s blog</title>
 	<meta name="author" content="Aleksey Timin">
 
 	
@@ -107,13 +107,9 @@ MathJax.Hub.Config({
 </script>
 
 	
-	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/">NMatrix 0.2.0 and Slicing</a></h1>
-	<div class="entry-content">
-		<p>A few days ago the <a href="http://sciruby.com/blog/2012/09/24/second-nmatrix-alpha-released/">new version</a> of NMatrix has been released. Besides a lot new features it has slicing operations now. The slicing has been implemented by two ways. First of they it&rsquo;s a slicing by reference. It is provided by <strong>#[]</strong> method:</p>
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">NMatrix 0.2.0 and Slicing</h1>
+	<div class="entry-content"><p>A few days ago the <a href="http://sciruby.com/blog/2012/09/24/second-nmatrix-alpha-released/">new version</a> of NMatrix has been released. Besides a lot new features it has slicing operations now. The slicing has been implemented by two ways. First of they it&rsquo;s a slicing by reference. It is provided by <strong>#[]</strong> method:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -144,10 +140,50 @@ MathJax.Hub.Config({
 
 <p>As you see both matrices has been changed when we assign a new value to element of <em>r</em> matrix. The <strong>#[]</strong> method doesn&rsquo;t allocate memory,  but creates a new matrix with reference to a base matrix <em>m</em>. You can build chain of the same slicing and all of new matrices will be references for one base.</p>
 
+<!-- MORE -->
 
-		
-		<a href="/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/" class="more-link">Read on &rarr;</a>
-	</div>
+
+<p></p>
+
+<p><strong>Note:</strong> The NMatrix uses ATLAS for multiplication, which surely cannot work with references. And so when you try to multiply references they will be copped to temporary matrices before multiplication. Remember it using a big data. Also it is for several operations such as a casting.</p>
+
+<p>Second method of slicing by copying is <strong>#slice</strong>. This method allocates memory for the slice and copies all elements from the base matrix. Example:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s2">&quot;nmatrix&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s2">&quot;pp&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Create dense matrix with size [3,3] and fill it.</span>
+</span><span class='line'><span class="n">m</span> <span class="o">=</span> <span class="no">NMatrix</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:dense</span><span class="p">,</span> <span class="o">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="o">]</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">r</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#=&gt; [1,2] [4,5]</span>
+</span><span class='line'><span class="n">r</span><span class="o">.</span><span class="n">is_ref?</span>         <span class="c1">#=&gt; false</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">r</span><span class="o">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">999</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pp</span> <span class="n">r</span>              <span class="c1">#=&gt; [999,2] [4,5]</span>
+</span><span class='line'><span class="n">pp</span> <span class="n">m</span>              <span class="c1">#=&gt; [0,1,2] [3,4,5] [6,7,8]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This time the <em>r</em> matrix is an independent object. All changes of it doesn&rsquo;t concern the base matrix and you can use it as an usual matrix.</p>
+
+<p>I ought to remind that the slicing operations are pretty raw. Will be careful to use it. If you have a bug, feel free to report about it <a href="https://github.com/SciRuby/nmatrix/issues?direction=desc&amp;milestone=2&amp;sort=created&amp;state=open">here</a>.</p>
+
+<p>Thanks, Aleksey.</p>
+</div>
 
 
 <div class="meta">
@@ -165,114 +201,32 @@ MathJax.Hub.Config({
 
 </div>
 	
-		<span class="comments"><a href="/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing//index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/#disqus_thread">Comments</a></span>
 	
 </div></article>
 
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/">Метод K-ближайших соседей и распознавание рукописных цифр</a></h1>
-	<div class="entry-content">
-		<p>Источник <a href="http://jeremykun.wordpress.com/2012/08/26/k-nearest-neighbors-and-handwritten-digit-classification/">K-Nearest-Neighbors and Handwritten Digit Classification</a>.</p>
-
-<h2>Рецепт классификации</h2>
-
-<p>Одна из важных задач машинного обучения (далее МО) - это распределение объектов по нескольких известных классов. Например, Вам нужно отличить полезное письмо от спама. Или Вы хотите определить вид жука на основе его физических параметров, таких как: вес, цвет, длина челюсти. Эти &ldquo;атрибуты&rdquo;, часто называемые <em>свойствами</em> в терминах МО, и так же часто интерпретируются, как <em>размерностью</em> в рамках линейной алгебры. В качестве разминка для читателей: &ldquo;Какие <strong>свойства</strong> имеет электронное письмо?&rdquo;. Верных ответов будет достаточно много.</p>
-
-
-		
-		<a href="/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/" class="more-link">Read on &rarr;</a>
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
 	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-<time class='entry-date' datetime='2012-08-27T21:09:00+06:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>9:09 pm</span></time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/math/'>math</a>, <a class='category' href='/blog/categories/meachine-learning/'>meachine learning</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/russian/'>russian</a>, <a class='category' href='/blog/categories/translations/'>translations</a>
-
-
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
 </div>
-	
-		<span class="comments"><a href="/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification//index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/">NMatrix -a Numeric Library for Mathematicians in Ruby</a></h1>
-	<div class="entry-content">
-		<p>A few words about very interesting project - <a href="https://github.com/SciRuby/nmatrix">NMatrix</a>. At the moment Python is the best chose of dynamic languages to work with math. It has many very stable and quality libraries such as <a href="http://numpy.scipy.org/">NumPy</a>, <a href="http://www.scipy.org/">SciPy</a>, <a href="http://matplotlib.sourceforge.net/">matlib</a> and etc. But all may change&hellip;</p>
-
-
-		
-		<a href="/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
 
 
 
-
-<time class='entry-date' datetime='2012-08-13T08:37:00+06:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>8:37 am</span></time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/english/'>english</a>, <a class='category' href='/blog/categories/math/'>math</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
-
-
+<section id="comment">
+    <h1 class="title">Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-	
-		<span class="comments"><a href="/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby//index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2012/08/12/translation-of-machine-learning-introduction-dot/">Перевод &#8216;Machine Learning. Introduction.&#8217;</a></h1>
-	<div class="entry-content">
-		<h2>От переводчика(меня).</h2>
-
-<p>Не так давно наткнулся на очень интересный ресурс <a href="http://jeremykun.wordpress.com/">Math&amp;Programming</a>, который, как вы наверно догадались по названию, посвящен математике и программированию. И поскольку, мне самому очень интересна тема искусственного интеллекта, решил начать перевод серии постов посвященной машинному обучению. Таким образом, я надеюсь убить 2-х зайцев: разобраться в материале самому и подтянуть навыки технического перевода. Ну конечно, я очень надеюсь, что это будет еще кому-то полезно.</p>
-
-
-		
-		<a href="/blog/2012/08/12/translation-of-machine-learning-introduction-dot/" class="more-link">Read on &rarr;</a>
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-<time class='entry-date' datetime='2012-08-12T15:58:00+06:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>3:58 pm</span></time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/math/'>math</a>, <a class='category' href='/blog/categories/meachine-learning/'>meachine learning</a>, <a class='category' href='/blog/categories/russian/'>russian</a>, <a class='category' href='/blog/categories/translations/'>translations</a>
-
-
+</section>
 </div>
-	
-		<span class="comments"><a href="/blog/2012/08/12/translation-of-machine-learning-introduction-dot//index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-<nav id="pagenavi">
-    
-    
-    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
-</nav></div>
 	<footer id="footer" class="inner">Copyright &copy; 2015
 
     Aleksey Timin
@@ -291,7 +245,10 @@ MathJax.Hub.Config({
       var disqus_shortname = 'flpbacksblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://flipback.github.com/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/';
+        var disqus_url = 'http://flipback.github.com/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

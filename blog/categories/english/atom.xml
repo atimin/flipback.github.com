@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: English | Flipback's blog]]></title>
+  <link href="http://flipback.github.com/blog/categories/english/atom.xml" rel="self"/>
+  <link href="http://flipback.github.com/"/>
+  <updated>2015-02-01T21:24:54+05:00</updated>
+  <id>http://flipback.github.com/</id>
+  <author>
+    <name><![CDATA[Aleksey Timin]]></name>
+    <email><![CDATA[atimin@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[NMatrix 0.2.0 and Slicing]]></title>
+    <link href="http://flipback.github.com/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/"/>
+    <updated>2012-09-30T19:43:00+06:00</updated>
+    <id>http://flipback.github.com/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing</id>
+    <content type="html"><![CDATA[<p>A few days ago the <a href="http://sciruby.com/blog/2012/09/24/second-nmatrix-alpha-released/">new version</a> of NMatrix has been released. Besides a lot new features it has slicing operations now. The slicing has been implemented by two ways. First of they it&rsquo;s a slicing by reference. It is provided by <strong>#[]</strong> method:</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">nmatrix</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">pp</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;Create dense matrix with size [3,3] and fill it.&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">m</span> <span class="o">=</span> <span class="no">NMatrix</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:dense</span><span class="p">,</span> <span class="o">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="o">]</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span><span class="p">)</span>
+</span><span class='line'><span class="n">r</span> <span class="o">=</span> <span class="n">m</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#=&gt; [1,2] [4,5]</span>
+</span><span class='line'><span class="n">r</span><span class="o">.</span><span class="n">is_ref?</span>         <span class="c1">#=&gt; true&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">r</span><span class="o">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">999</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;pp r              #=&gt; [999,2] [4,5]</span>
+</span><span class='line'><span class="sr">pp m              #=&gt; [0,999,2] [3,4,5] [6,7,8]</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>As you see both matrices has been changed when we assign a new value to element of <em>r</em> matrix. The <strong>#[]</strong> method doesn&rsquo;t allocate memory,  but creates a new matrix with reference to a base matrix <em>m</em>. You can build chain of the same slicing and all of new matrices will be references for one base.</p>
+
+<!-- MORE -->
+
+
+<p></p>
+
+<p><strong>Note:</strong> The NMatrix uses ATLAS for multiplication, which surely cannot work with references. And so when you try to multiply references they will be copped to temporary matrices before multiplication. Remember it using a big data. Also it is for several operations such as a casting.</p>
+
+<p>Second method of slicing by copying is <strong>#slice</strong>. This method allocates memory for the slice and copies all elements from the base matrix. Example:</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">nmatrix</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">pp</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;Create dense matrix with size [3,3] and fill it.&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">m</span> <span class="o">=</span> <span class="no">NMatrix</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:dense</span><span class="p">,</span> <span class="o">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="o">]</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;r = m.slice(0..1, 1..2) #=&gt; [1,2] [4,5]</span>
+</span><span class='line'><span class="sr">r.is_ref?         #=&gt; false&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">r</span><span class="o">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">999</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;pp r              #=&gt; [999,2] [4,5]</span>
+</span><span class='line'><span class="sr">pp m              #=&gt; [0,1,2] [3,4,5] [6,7,8]</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>This time the <em>r</em> matrix is an independent object. All changes of it doesn&rsquo;t concern the base matrix and you can use it as an usual matrix.</p>
+
+<p>I ought to remind that the slicing operations are pretty raw. Will be careful to use it. If you have a bug, feel free to report about it <a href="https://github.com/SciRuby/nmatrix/issues?direction=desc&amp;milestone=2&amp;sort=created&amp;state=open">here</a>.</p>
+
+<p>Thanks, Aleksey.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[NMatrix -a Numeric Library for Mathematicians in Ruby]]></title>
+    <link href="http://flipback.github.com/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/"/>
+    <updated>2012-08-13T08:37:00+06:00</updated>
+    <id>http://flipback.github.com/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby</id>
+    <content type="html"><![CDATA[<p>A few words about very interesting project - <a href="https://github.com/SciRuby/nmatrix">NMatrix</a>. At the moment Python is the best chose of dynamic languages to work with math. It has many very stable and quality libraries such as <a href="http://numpy.scipy.org/">NumPy</a>, <a href="http://www.scipy.org/">SciPy</a>, <a href="http://matplotlib.sourceforge.net/">matlib</a> and etc. But all may change&hellip;</p>
+
+<!-- more -->
+
+
+<p>The <a href="http://sciruby.com/">SciRuby</a> a project has goal to give powerful math instruments for Ruby programmers. It consists of several libraries for calculation and visualisation. The NMatrix is core library of the SciRuby for linear algebra written in C and C++. It has architecture that likes to <a href="http://narray.rubyforge.org/">NArray</a> and aims to maximum performance. Currently the library have status pre-alpha and is reborning to more clear code with C++ templates. But a new release will come very soon (this month).</p>
+
+<p>I&rsquo;m contributing the project and working around slicing operation. It&rsquo;s very interesting for me and I feel I do something important. Because NMatrix has three types(<strong>dense</strong>, <strong>list</strong>, <strong>yale</strong>) to storage elements I need to implement three different algorithms (currently I have done a <strong>dense</strong> type). I hope it maybe interesting for readers and I want to write tree articles and try to describe structures of data and algorithms.</p>
+
+<p>But while, you can play (for install <a href="https://github.com/SciRuby/nmatrix/wiki/NMatrix-Installation">see</a>) :</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;require &amp;lsquo;nmatrix&amp;rsquo;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">q</span> <span class="o">=</span> <span class="no">NMatrix</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'><span class="n">q</span><span class="o">.</span><span class="n">pretty_print</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>For more information see <a href="https://github.com/SciRuby/nmatrix/wiki/NMatrix">wiki</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>
