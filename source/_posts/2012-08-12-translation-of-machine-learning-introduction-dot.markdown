@@ -48,4 +48,4 @@ categories: [Russian, translations, meachine learning, math]
 
 Пока все. 
 
-[1]: {{ root_url }}/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/
+[1]: /blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/
