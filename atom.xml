@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Flipback's blog]]></title>
-  <link href="http://flipback.github.com/atom.xml" rel="self"/>
-  <link href="http://flipback.github.com/"/>
-  <updated>2015-02-01T21:43:34+05:00</updated>
-  <id>http://flipback.github.com/</id>
+  <link href="http://blog.flipback.net/atom.xml" rel="self"/>
+  <link href="http://blog.flipback.net/"/>
+  <updated>2015-02-01T21:58:06+05:00</updated>
+  <id>http://blog.flipback.net/</id>
   <author>
     <name><![CDATA[Aleksey Timin]]></name>
     <email><![CDATA[atimin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[NMatrix 0.2.0 and Slicing]]></title>
-    <link href="http://flipback.github.com/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/"/>
+    <link href="http://blog.flipback.net/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/"/>
     <updated>2012-09-30T19:43:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing</id>
+    <id>http://blog.flipback.net/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing</id>
     <content type="html"><![CDATA[<p>A few days ago the <a href="http://sciruby.com/blog/2012/09/24/second-nmatrix-alpha-released/">new version</a> of NMatrix has been released. Besides a lot new features it has slicing operations now. The slicing has been implemented by two ways. First of they it&rsquo;s a slicing by reference. It is provided by <strong>#[]</strong> method:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -97,9 +97,9 @@
   
   <entry>
     <title type="html"><![CDATA[Метод K-ближайших соседей и распознавание рукописных цифр]]></title>
-    <link href="http://flipback.github.com/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/"/>
+    <link href="http://blog.flipback.net/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/"/>
     <updated>2012-08-27T21:09:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification</id>
+    <id>http://blog.flipback.net/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification</id>
     <content type="html"><![CDATA[<p>Источник <a href="http://jeremykun.wordpress.com/2012/08/26/k-nearest-neighbors-and-handwritten-digit-classification/">K-Nearest-Neighbors and Handwritten Digit Classification</a>.</p>
 
 <h2>Рецепт классификации</h2>
@@ -310,7 +310,7 @@
 
 <p>Запустив алгоритм с $ k=1 $ получаем 89% успешного выполнения. Меняя $ k $ мы видим изменение эффективности, без модификации алгоритма или метрики. В итоге, график ниже показывает, что рукописные данные вполне согласуются с аксиомой ближайших соседей.</p>
 
-<p><img src="http://flipback.github.com/images/posts/k-vs-percentage-correct.png" title="A graph of classification accuracy against k for values of k between 1 and 50. The graph clearly shows a downward trend as k increases, but all values k &lt; 10 are comparably go" alt="" /></p>
+<p><img src="http://blog.flipback.net/images/posts/k-vs-percentage-correct.png" title="A graph of classification accuracy against k for values of k between 1 and 50. The graph clearly shows a downward trend as k increases, but all values k &lt; 10 are comparably go" alt="" /></p>
 
 <p>Также возможно улучшить эту программу и мы могли бы сделать более подходящий алгоритм. Но рассматривая, что алгоритм использует необработанные данные и не манипулирует с с ними, результат не так уж плох.</p>
 
@@ -320,7 +320,7 @@
 
 <p>Первое преимущество <em>k-ближайших соседей</em> - общий и широко-известный алгоритм, который легко реализуется. Конечно, мы сделали ядро алгоритма всего в три строчки. Но данный алгоритм легко распараллелить и он от природы гибок. В отличии от <a href="http://jeremykun.wordpress.com/2011/08/11/the-perceptron-and-all-the-things-it-cant-perceive/">персептрона</a>, который полагается на линейное разделение, метод соседей и аксиома соседства доступны для данных, которые представлены в виде разных геометрических фигур. В этих <a href="http://courses.cs.tamu.edu/rgutier/cs790_w02/l8.pdf">лекциях</a> есть хорошие примеры, как показано ниже, и читатель может конечно сделать еще больше фокусов.</p>
 
-<p><img src="http://flipback.github.com/images/posts/concentric-circles-knn.png" title="k-nearest-neighbors applied to a data set organized in concentric circles." alt="" /></p>
+<p><img src="http://blog.flipback.net/images/posts/concentric-circles-knn.png" title="k-nearest-neighbors applied to a data set organized in concentric circles." alt="" /></p>
 
 <p>Конечно, гибкость еще больше, в силу того, что можно использовать любые метрики для подсчета дистанций. Можно для примера, использовать <a href="http://www.improvedoutcomes.com/docs/WebSiteDocs/Clustering/Clustering_Parameters/Manhattan_Distance_Metric.htm">метрику Манхэттена</a>, если точки располагаются в городе. Возможности ограничиваются только нахождением новых и полезных метрик.</p>
 
@@ -336,9 +336,9 @@
   
   <entry>
     <title type="html"><![CDATA[NMatrix -a Numeric Library for Mathematicians in Ruby]]></title>
-    <link href="http://flipback.github.com/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/"/>
+    <link href="http://blog.flipback.net/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/"/>
     <updated>2012-08-13T08:37:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby</id>
+    <id>http://blog.flipback.net/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby</id>
     <content type="html"><![CDATA[<p>A few words about very interesting project - <a href="https://github.com/SciRuby/nmatrix">NMatrix</a>. At the moment Python is the best chose of dynamic languages to work with math. It has many very stable and quality libraries such as <a href="http://numpy.scipy.org/">NumPy</a>, <a href="http://www.scipy.org/">SciPy</a>, <a href="http://matplotlib.sourceforge.net/">matlib</a> and etc. But all may change&hellip;</p>
 
 <!-- more -->
@@ -367,9 +367,9 @@
   
   <entry>
     <title type="html"><![CDATA[Перевод 'Machine Learning. Introduction.']]></title>
-    <link href="http://flipback.github.com/blog/2012/08/12/translation-of-machine-learning-introduction-dot/"/>
+    <link href="http://blog.flipback.net/blog/2012/08/12/translation-of-machine-learning-introduction-dot/"/>
     <updated>2012-08-12T15:58:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/08/12/translation-of-machine-learning-introduction-dot</id>
+    <id>http://blog.flipback.net/blog/2012/08/12/translation-of-machine-learning-introduction-dot</id>
     <content type="html"><![CDATA[<h2>От переводчика(меня).</h2>
 
 <p>Не так давно наткнулся на очень интересный ресурс <a href="http://jeremykun.wordpress.com/">Math&amp;Programming</a>, который, как вы наверно догадались по названию, посвящен математике и программированию. И поскольку, мне самому очень интересна тема искусственного интеллекта, решил начать перевод серии постов посвященной машинному обучению. Таким образом, я надеюсь убить 2-х зайцев: разобраться в материале самому и подтянуть навыки технического перевода. Ну конечно, я очень надеюсь, что это будет еще кому-то полезно.</p>
@@ -396,7 +396,7 @@
 <p>Пока мы намереваемся покрыть классический набор тем МО, такие как нейронные сети и дерева решений, мы хотели бы бегло показать более сложные современные методы, такие как метод опорных векторов (<em>suppot vector machines</em>) и методы основанные на Колмогоровской сложности. Итак, мы публикуем ниже честолюбивый список тем (в необязательном порядке):</p>
 
 <ol>
-<li> <a href="http://flipback.github.com/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/">К-ближайших соседей</a></li>
+<li> <a href="http://blog.flipback.net/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/">К-ближайших соседей</a></li>
 <li> Дерево решений</li>
 <li> Кластеризация по центру и по плотности</li>
 <li> Нейронные сети</li>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Math | Flipback's blog]]></title>
-  <link href="http://flipback.github.com/blog/categories/math/atom.xml" rel="self"/>
-  <link href="http://flipback.github.com/"/>
-  <updated>2015-02-01T21:43:34+05:00</updated>
-  <id>http://flipback.github.com/</id>
+  <link href="http://blog.flipback.net/blog/categories/math/atom.xml" rel="self"/>
+  <link href="http://blog.flipback.net/"/>
+  <updated>2015-02-01T21:58:06+05:00</updated>
+  <id>http://blog.flipback.net/</id>
   <author>
     <name><![CDATA[Aleksey Timin]]></name>
     <email><![CDATA[atimin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[NMatrix 0.2.0 and Slicing]]></title>
-    <link href="http://flipback.github.com/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/"/>
+    <link href="http://blog.flipback.net/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/"/>
     <updated>2012-09-30T19:43:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing</id>
+    <id>http://blog.flipback.net/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing</id>
     <content type="html"><![CDATA[<p>A few days ago the <a href="http://sciruby.com/blog/2012/09/24/second-nmatrix-alpha-released/">new version</a> of NMatrix has been released. Besides a lot new features it has slicing operations now. The slicing has been implemented by two ways. First of they it&rsquo;s a slicing by reference. It is provided by <strong>#[]</strong> method:</p>
 
 <p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -99,9 +99,9 @@
   
   <entry>
     <title type="html"><![CDATA[Метод K-ближайших соседей и распознавание рукописных цифр]]></title>
-    <link href="http://flipback.github.com/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/"/>
+    <link href="http://blog.flipback.net/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/"/>
     <updated>2012-08-27T21:09:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification</id>
+    <id>http://blog.flipback.net/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification</id>
     <content type="html"><![CDATA[<p>Источник <a href="http://jeremykun.wordpress.com/2012/08/26/k-nearest-neighbors-and-handwritten-digit-classification/">K-Nearest-Neighbors and Handwritten Digit Classification</a>.</p>
 
 <h2>Рецепт классификации</h2>
@@ -354,9 +354,9 @@
   
   <entry>
     <title type="html"><![CDATA[NMatrix -a Numeric Library for Mathematicians in Ruby]]></title>
-    <link href="http://flipback.github.com/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/"/>
+    <link href="http://blog.flipback.net/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/"/>
     <updated>2012-08-13T08:37:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby</id>
+    <id>http://blog.flipback.net/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby</id>
     <content type="html"><![CDATA[<p>A few words about very interesting project - <a href="https://github.com/SciRuby/nmatrix">NMatrix</a>. At the moment Python is the best chose of dynamic languages to work with math. It has many very stable and quality libraries such as <a href="http://numpy.scipy.org/">NumPy</a>, <a href="http://www.scipy.org/">SciPy</a>, <a href="http://matplotlib.sourceforge.net/">matlib</a> and etc. But all may change&hellip;</p>
 
 <!-- more -->
@@ -392,9 +392,9 @@
   
   <entry>
     <title type="html"><![CDATA[Перевод 'Machine Learning. Introduction.']]></title>
-    <link href="http://flipback.github.com/blog/2012/08/12/translation-of-machine-learning-introduction-dot/"/>
+    <link href="http://blog.flipback.net/blog/2012/08/12/translation-of-machine-learning-introduction-dot/"/>
     <updated>2012-08-12T15:58:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/08/12/translation-of-machine-learning-introduction-dot</id>
+    <id>http://blog.flipback.net/blog/2012/08/12/translation-of-machine-learning-introduction-dot</id>
     <content type="html"><![CDATA[<h2>От переводчика(меня).</h2>
 
 <p>Не так давно наткнулся на очень интересный ресурс <a href="http://jeremykun.wordpress.com/">Math&amp;Programming</a>, который, как вы наверно догадались по названию, посвящен математике и программированию. И поскольку, мне самому очень интересна тема искусственного интеллекта, решил начать перевод серии постов посвященной машинному обучению. Таким образом, я надеюсь убить 2-х зайцев: разобраться в материале самому и подтянуть навыки технического перевода. Ну конечно, я очень надеюсь, что это будет еще кому-то полезно.</p>

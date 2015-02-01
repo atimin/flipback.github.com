@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Translations | Flipback's blog]]></title>
-  <link href="http://flipback.github.com/blog/categories/translations/atom.xml" rel="self"/>
-  <link href="http://flipback.github.com/"/>
-  <updated>2015-02-01T21:43:34+05:00</updated>
-  <id>http://flipback.github.com/</id>
+  <link href="http://blog.flipback.net/blog/categories/translations/atom.xml" rel="self"/>
+  <link href="http://blog.flipback.net/"/>
+  <updated>2015-02-01T21:58:06+05:00</updated>
+  <id>http://blog.flipback.net/</id>
   <author>
     <name><![CDATA[Aleksey Timin]]></name>
     <email><![CDATA[atimin@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Метод K-ближайших соседей и распознавание рукописных цифр]]></title>
-    <link href="http://flipback.github.com/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/"/>
+    <link href="http://blog.flipback.net/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/"/>
     <updated>2012-08-27T21:09:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification</id>
+    <id>http://blog.flipback.net/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification</id>
     <content type="html"><![CDATA[<p>Источник <a href="http://jeremykun.wordpress.com/2012/08/26/k-nearest-neighbors-and-handwritten-digit-classification/">K-Nearest-Neighbors and Handwritten Digit Classification</a>.</p>
 
 <h2>Рецепт классификации</h2>
@@ -270,9 +270,9 @@
   
   <entry>
     <title type="html"><![CDATA[Перевод 'Machine Learning. Introduction.']]></title>
-    <link href="http://flipback.github.com/blog/2012/08/12/translation-of-machine-learning-introduction-dot/"/>
+    <link href="http://blog.flipback.net/blog/2012/08/12/translation-of-machine-learning-introduction-dot/"/>
     <updated>2012-08-12T15:58:00+06:00</updated>
-    <id>http://flipback.github.com/blog/2012/08/12/translation-of-machine-learning-introduction-dot</id>
+    <id>http://blog.flipback.net/blog/2012/08/12/translation-of-machine-learning-introduction-dot</id>
     <content type="html"><![CDATA[<h2>От переводчика(меня).</h2>
 
 <p>Не так давно наткнулся на очень интересный ресурс <a href="http://jeremykun.wordpress.com/">Math&amp;Programming</a>, который, как вы наверно догадались по названию, посвящен математике и программированию. И поскольку, мне самому очень интересна тема искусственного интеллекта, решил начать перевод серии постов посвященной машинному обучению. Таким образом, я надеюсь убить 2-х зайцев: разобраться в материале самому и подтянуть навыки технического перевода. Ну конечно, я очень надеюсь, что это будет еще кому-то полезно.</p>
