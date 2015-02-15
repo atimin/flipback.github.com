@@ -1,97 +1,112 @@
 
 <!DOCTYPE HTML>
+
 <html>
+
 <head>
 	<meta charset="utf-8">
-	<title>Blog Archives - Flipback&#8217;s blog</title>
-	<meta name="author" content="Aleksey Timin">
+	<title>Blog Archives - Задачник кормчего</title>
+	<meta name="author" content="Алексей Тимин">
 
 	
-	<meta name="description" content="2012 NMatrix 0.2.0 and slicing Sep 30 english, math, ruby Comments Метод K-ближайших соседей и распознавание рукописных цифр Aug 27 math, meachine &hellip;">
+	<meta name="description" content="2012 Sep 30 english, math, ruby Comments NMatrix 0.2.0 and slicing Aug 27 math, meachine learning, python, russian, translations Comments Метод K- &hellip;">
 	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-	<link href="/atom.xml" rel="alternate" title="Flipback's blog" type="application/atom+xml">
-	<link rel="canonical" href="">
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Задачник кормчего" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://blog.flipback.net/blog/archives/">
 	<link href="/favicon.png" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
-</head>
-
-<!-- mathjax config similar to math.stackexchange -->
-<script type="text/x-mathjax-config">
+	<script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-  jax: ["input/TeX", "output/HTML-CSS"],
-  tex2jax: {
-    inlineMath: [ ['$', '$'] ],
-    displayMath: [ ['$$', '$$']],
-    processEscapes: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-  },
-  messageStyle: "none",
-  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
 });
 </script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-10108623-4']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
 
 <body>
-	<header id="header" class="inner"><h1><a href="/">Flipback&#8217;s blog</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-	<li><a href="http://flip-cherdak.blogspot.com/">Old blog</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-	<li><a href="http://flip-cherdak.blogspot.com/">Old blog</a></li>
-</ul>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("atimin@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+		});
+	</script>
+	
 </div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:blog.flipback.net">
-			</form>
-		</div>
-	</div>
+
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Блог</a></li>
+    <li><a href="/blog/archives">Архив</a></li>
+</ul>
+
 </nav>
-<nav id="sub-nav" class="alignright">
+<nav id="sub-nav">
 	<div class="social">
 		
-		
-		<a class="google" href="https://plus.google.com/100647047226011286297?rel=author" title="Google+">Google+</a>
-		
-		
-		<a class="twitter" href="http://twitter.com/aleksey_timin" title="Twitter">Twitter</a>
-		
-		
-		<a class="github" href="https://github.com/flipback" title="GitHub">GitHub</a>
+			<a class="email" href="mailto:atimin@gmail.com" title="Email">Email</a>
 		
 		
 		
+			<a class="google" href="https://plus.google.com/100647047226011286297" rel="author" title="Google+">Google+</a>
 		
 		
-		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+			<a class="twitter" href="http://twitter.com/aleksey_timin" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/flipback" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
 		
 	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:blog.flipback.net">
-	</form>
 </nav>
-
-</header>
-	
-		
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
 <div id="banner" class="inner">
 	<div class="container">
 		<ul class="feed"></ul>
@@ -106,8 +121,10 @@ MathJax.Hub.Config({
 	})(jQuery);
 </script>
 
-	
-	<div id="content" class="inner">
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><div itemscope itemtype="http://schema.org/Blog">
+
 	
 
 
@@ -115,10 +132,10 @@ MathJax.Hub.Config({
 	
 	<section class="archives"><h1 class="year">2012</h1>
 
-<article>
-	<h1 class="title"><a href="/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/">NMatrix 0.2.0 and slicing</a></h1>
+<article itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
 	<div class="meta">
-		<span class="date">Sep 30</span>
+		<span class="date"><time datetime="2012-09-30T19:43:00+06:00" itemprop="datePublished">Sep 30</time></span>
+		<br>
 		<span class="tags">
 
 
@@ -130,15 +147,16 @@ MathJax.Hub.Config({
 	    <span class="comments"><a href="/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/#disqus_thread">Comments</a></span>
 	    
 	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2012/09/30/nmatrix-0-dot-2-0-and-slicing/">NMatrix 0.2.0 and slicing</a></h1>
 </article>
 
 	
 
 
-<article>
-	<h1 class="title"><a href="/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/">Метод K-ближайших соседей и распознавание рукописных цифр</a></h1>
+<article itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
 	<div class="meta">
-		<span class="date">Aug 27</span>
+		<span class="date"><time datetime="2012-08-27T21:09:00+06:00" itemprop="datePublished">Aug 27</time></span>
+		<br>
 		<span class="tags">
 
 
@@ -150,15 +168,16 @@ MathJax.Hub.Config({
 	    <span class="comments"><a href="/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/#disqus_thread">Comments</a></span>
 	    
 	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/">Метод K-ближайших соседей и распознавание рукописных цифр</a></h1>
 </article>
 
 	
 
 
-<article>
-	<h1 class="title"><a href="/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/">NMatrix -a numeric library for mathematicians in Ruby</a></h1>
+<article itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
 	<div class="meta">
-		<span class="date">Aug 13</span>
+		<span class="date"><time datetime="2012-08-13T08:37:00+06:00" itemprop="datePublished">Aug 13</time></span>
+		<br>
 		<span class="tags">
 
 
@@ -170,15 +189,16 @@ MathJax.Hub.Config({
 	    <span class="comments"><a href="/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/#disqus_thread">Comments</a></span>
 	    
 	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2012/08/13/nmatrix-a-numeric-library-for-mathematicians-in-ruby/">NMatrix -a numeric library for mathematicians in Ruby</a></h1>
 </article>
 
 	
 
 
-<article>
-	<h1 class="title"><a href="/blog/2012/08/12/translation-of-machine-learning-introduction-dot/">Перевод &#8216;Machine Learning. Introduction.&#8217;</a></h1>
+<article itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
 	<div class="meta">
-		<span class="date">Aug 12</span>
+		<span class="date"><time datetime="2012-08-12T15:58:00+06:00" itemprop="datePublished">Aug 12</time></span>
+		<br>
 		<span class="tags">
 
 
@@ -190,13 +210,20 @@ MathJax.Hub.Config({
 	    <span class="comments"><a href="/blog/2012/08/12/translation-of-machine-learning-introduction-dot/#disqus_thread">Comments</a></span>
 	    
 	</div>
+	<h1 class="title" itemprop="name"><a href="/blog/2012/08/12/translation-of-machine-learning-introduction-dot/">Перевод &#8216;Machine Learning. Introduction.&#8217;</a></h1>
 </article>
-</div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
 
-    Aleksey Timin
+  </section>
+</div></div>
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
 
-</footer>
+    Алексей Тимин
+
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
 	<script src="/javascripts/slash.js"></script>
 <script src="/javascripts/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
@@ -214,7 +241,7 @@ MathJax.Hub.Config({
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Python | Flipback's blog]]></title>
+  <title><![CDATA[Category: python | Задачник кормчего]]></title>
   <link href="http://blog.flipback.net/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://blog.flipback.net/"/>
-  <updated>2015-02-01T21:58:06+05:00</updated>
+  <updated>2015-02-15T19:06:36+05:00</updated>
   <id>http://blog.flipback.net/</id>
   <author>
-    <name><![CDATA[Aleksey Timin]]></name>
+    <name><![CDATA[Алексей Тимин]]></name>
     <email><![CDATA[atimin@gmail.com]]></email>
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>

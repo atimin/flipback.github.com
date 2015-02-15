@@ -1,97 +1,112 @@
 
 <!DOCTYPE HTML>
+
 <html>
+
 <head>
 	<meta charset="utf-8">
-	<title>Метод K-ближайших соседей и распознавание рукописных цифр - Flipback&#8217;s blog</title>
-	<meta name="author" content="Aleksey Timin">
+	<title>Метод K-ближайших соседей и распознавание рукописных цифр - Задачник кормчего</title>
+	<meta name="author" content="Алексей Тимин">
 
 	
-	<meta name="description" content="Источник K-Nearest-Neighbors and Handwritten Digit Classification. Рецепт классификации Одна из важных задач машинного обучения (далее МО) - это &hellip;">
+	<meta name="description" content="Метод K-ближайших соседей и распознавание рукописных цифр Источник K-Nearest-Neighbors and Handwritten Digit Classification. Рецепт классификации &hellip;">
 	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-	<link href="/atom.xml" rel="alternate" title="Flipback's blog" type="application/atom+xml">
-	<link rel="canonical" href="">
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Задачник кормчего" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://blog.flipback.net/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/">
 	<link href="/favicon.png" rel="shortcut icon">
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
-</head>
-
-<!-- mathjax config similar to math.stackexchange -->
-<script type="text/x-mathjax-config">
+	<script type="text/x-mathjax-config">
 MathJax.Hub.Config({
-  jax: ["input/TeX", "output/HTML-CSS"],
-  tex2jax: {
-    inlineMath: [ ['$', '$'] ],
-    displayMath: [ ['$$', '$$']],
-    processEscapes: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-  },
-  messageStyle: "none",
-  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
 });
 </script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-10108623-4']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
 
 <body>
-	<header id="header" class="inner"><h1><a href="/">Flipback&#8217;s blog</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-	<li><a href="http://flip-cherdak.blogspot.com/">Old blog</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-	<li><a href="http://flip-cherdak.blogspot.com/">Old blog</a></li>
-</ul>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.profilepic').append("<img src='http://www.gravatar.com/avatar/" + MD5("atimin@gmail.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+		});
+	</script>
+	
 </div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:blog.flipback.net">
-			</form>
-		</div>
-	</div>
+
+<nav id="main-nav"><ul class="main">
+    <li><a href="/">Блог</a></li>
+    <li><a href="/blog/archives">Архив</a></li>
+</ul>
+
 </nav>
-<nav id="sub-nav" class="alignright">
+<nav id="sub-nav">
 	<div class="social">
 		
-		
-		<a class="google" href="https://plus.google.com/100647047226011286297?rel=author" title="Google+">Google+</a>
-		
-		
-		<a class="twitter" href="http://twitter.com/aleksey_timin" title="Twitter">Twitter</a>
-		
-		
-		<a class="github" href="https://github.com/flipback" title="GitHub">GitHub</a>
+			<a class="email" href="mailto:atimin@gmail.com" title="Email">Email</a>
 		
 		
 		
+			<a class="google" href="https://plus.google.com/100647047226011286297" rel="author" title="Google+">Google+</a>
 		
 		
-		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+			<a class="twitter" href="http://twitter.com/aleksey_timin" title="Twitter">Twitter</a>
+		
+		
+			<a class="github" href="https://github.com/flipback" title="GitHub">GitHub</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+    	
+    	
+			<a class="rss" href="/atom.xml" title="RSS">RSS</a>
 		
 	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:blog.flipback.net">
-	</form>
 </nav>
-
-</header>
-	
-		
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
 <div id="banner" class="inner">
 	<div class="container">
 		<ul class="feed"></ul>
@@ -106,10 +121,11 @@ MathJax.Hub.Config({
 	})(jQuery);
 </script>
 
-	
-	<div id="content" class="inner"><article class="post">
-	<h1 class="title">Метод K-ближайших соседей и распознавание рукописных цифр</h1>
-	<div class="entry-content"><p>Источник <a href="http://jeremykun.wordpress.com/2012/08/26/k-nearest-neighbors-and-handwritten-digit-classification/">K-Nearest-Neighbors and Handwritten Digit Classification</a>.</p>
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Метод K-ближайших соседей и распознавание рукописных цифр</h1>
+	<div class="entry-content" itemprop="articleBody"><p>Источник <a href="http://jeremykun.wordpress.com/2012/08/26/k-nearest-neighbors-and-handwritten-digit-classification/">K-Nearest-Neighbors and Handwritten Digit Classification</a>.</p>
 
 <h2>Рецепт классификации</h2>
 
@@ -342,25 +358,7 @@ MathJax.Hub.Config({
 <p>Последняя проблема, которую мы рассмотрим - масштабирование данных. А именно, нужно быть осторожным, когда конвертируем реальные данные в числа. Мы можем думать о каждом свойстве, как о случайной переменной, и мы хотим, что бы все эти переменные имели сопоставимые изменения. Причина проста - мы используем <em>сферы</em>. Можно описать КБС, как поиск наименьшей сферы с центром в безымянной точке, которая содержит $ k $  именных точек данных, и использовать большее общее этих точек, что бы классифицировать новую. Конечно, можно говорить &ldquo;сфера&rdquo; в любом метрическом пространстве; это просто множество точек на фиксированном расстоянии от центра. Важное замечание то, что сфера имеет одинаковую длину для все осей. Если данные масштабируются не правильно, когда геометрия сферы не отражает геометрию данных, и алгоритм будет спотыкаться.</p>
 </div>
 
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-<time class='entry-date' datetime='2012-08-27T21:09:00+06:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>9:09 pm</span></time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/math/'>math</a>, <a class='category' href='/blog/categories/meachine-learning/'>meachine learning</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/russian/'>russian</a>, <a class='category' href='/blog/categories/translations/'>translations</a>
-
-
-</div>
-	
-		<span class="comments"><a href="/blog/2012/08/27/k-nearest-neighbors-and-handwritten-digit-classification/#disqus_thread">Comments</a></span>
-	
-</div></article>
+</article>
 
 	<div class="share">
 	<div class="addthis_toolbox addthis_default_style ">
@@ -377,15 +375,6 @@ MathJax.Hub.Config({
 </div>
 
 
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- Flipback's blog -->
-<ins class="adsbygoogle"
-     style="display:inline-block;width:728px;height:90px"
-     data-ad-client="ca-pub-5818326126921980"
-     data-ad-slot="7071523091"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
 
 <section id="comment">
     <h1 class="title">Comments</h1>
@@ -394,11 +383,15 @@ MathJax.Hub.Config({
 </section>
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+			</div>
+			<footer id="footer" class="inner">Copyright &copy; 2015
 
-    Aleksey Timin
+    Алексей Тимин
 
-</footer>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+		</div>
+	</div>
 	<script src="/javascripts/slash.js"></script>
 <script src="/javascripts/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
@@ -419,7 +412,7 @@ MathJax.Hub.Config({
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
